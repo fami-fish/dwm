@@ -25,6 +25,7 @@
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -222,6 +223,7 @@ static void updateclientlist(void);
 static int updategeom(void);
 static void updatenumlockmask(void);
 static void updatesizehints(Client *c);
+static void logstr(char *c);
 static void updatestatus(void);
 static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
@@ -2001,6 +2003,24 @@ updatesizehints(Client *c)
 	c->isfixed = (c->maxw && c->maxh && c->maxw == c->minw && c->maxh == c->minh);
 	c->hintsvalid = 1;
 }
+void 
+logstr(char* c) {
+    FILE *f;
+    time_t now;
+    struct tm tm;
+
+    f = fopen("dwm.log", "a+");
+    setbuf(f, NULL); /* disables buffering */
+    if (f == NULL) { 
+        return;
+    }
+    
+    now = time(NULL);
+    tm = *localtime(&now);
+
+    fprintf(f, "[%02d:%02d:%02d] %s", tm.tm_hour, tm.tm_min, tm.tm_sec, c);
+    return;
+}
 
 void
 updatestatus(void)
@@ -2143,6 +2163,8 @@ zoom(const Arg *arg)
 int
 main(int argc, char *argv[])
 {
+    logstr("DWM started");
+
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)

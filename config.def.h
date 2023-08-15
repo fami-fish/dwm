@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+/* logging & debugging */
+static const unsigned int logfile        = 1;   /* 1 means enable logging to a file*/    
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
